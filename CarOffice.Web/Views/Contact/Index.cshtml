@@ -1,0 +1,93 @@
+﻿@model ContactViewModel
+
+<div class="page-heading header-text">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <h1>Contact Us</h1>
+                <span>feel free to send us a message now!</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="contact-information">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="contact-item">
+                    <i class="fa fa-phone"></i>
+                    <h4>Phone</h4>
+                    <p>For more information, you can contact us via the following number<br></p>
+                    <a href="tel:+905383754105">+90 538 375 4105</a>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="contact-item">
+                    <i class="fa fa-envelope"></i>
+                    <h4>Email</h4>
+                    <p>For more information, you can contact us via the following email address.<br></p>
+                    <a href="mailto:ahmetbakirci30@gmail.com">contact@asia.com</a>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="contact-item">
+                    <i class="fa fa-map-marker"></i>
+                    <h4>Location</h4>
+                    <p>Fevzi Cakmak Neighborhood<br>10782th Street No:2A/9</p>
+                    <a href="https://goo.gl/maps/nwfuA8Pc9t25UQiS9">View on Google Maps</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="callback-form contact-us">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="section-heading">
+                    <h2>Send us a <em>message</em></h2>
+                    <span>Please do not hesitate to send us a message!</span>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="contact-form">
+                    <form id="contact" asp-controller="contact" asp-action="index" method="post">
+                        <div class="row">
+                            <div class="col-lg-4 col-md-12 col-sm-12">
+                                <fieldset>
+                                    <input asp-for="FullName" type="text" class="form-control" id="name" placeholder="Full Name" required>
+                                </fieldset>
+                            </div>
+                            <div class="col-lg-4 col-md-12 col-sm-12">
+                                <fieldset>
+                                    <input asp-for="Email" type="email" class="form-control" id="email" pattern="[a-z0-9._%+-]+@@[a-z0-9.-]+\.[a-z]{2,}$" placeholder="E-Mail Address" required>
+                                </fieldset>
+                            </div>
+                            <div class="col-lg-4 col-md-12 col-sm-12">
+                                <fieldset>
+                                    <input asp-for="Subject" type="text" class="form-control" id="subject" placeholder="Subject" required>
+                                </fieldset>
+                            </div>
+                            <div class="col-lg-12">
+                                <fieldset>
+                                    <textarea asp-for="Message" rows="6" class="form-control" id="message" placeholder="Your Message" required></textarea>
+                                </fieldset>
+                            </div>
+                            <div class="col-lg-12">
+                                <fieldset>
+                                    <button type="submit" id="form-submit" class="filled-button">Send Message</button>
+                                </fieldset>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="map">
+    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3148.237032593424!2d32.52450431517799!3d37.90152197973653!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x14d08fe55b26518d%3A0xc734b7349413091e!2s%C5%9Eehristan%20Camii!5e0!3m2!1sen!2str!4v1616533821125!5m2!1sen!2str" style="border:0; width:100%; height:500px" frameborder="0" loading="lazy" allowfullscreen></iframe>
+</div>

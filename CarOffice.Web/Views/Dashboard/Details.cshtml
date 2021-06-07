@@ -1,0 +1,174 @@
+﻿@model Car
+
+<div class="page-heading header-text">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <h1>Details</h1>
+                <span>selected car details</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="services">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-7">
+                <div>
+                    <img src="~/assets/images/@((Model.Images.FirstOrDefault() != null)?@Model.Images.First().Path : string.Empty)" alt="Image upload error!" class="img-fluid wc-image">
+                </div>
+
+                <br>
+
+                <div class="row">
+                    @foreach (var image in Model.Images)
+                    {
+                        <div class="col-sm-4 col-6">
+                            <div>
+                                <img src="~/assets/images/@image.Path" alt="Image upload error!" class="img-fluid">
+                            </div>
+                            <br>
+                        </div>
+                    }
+                </div>
+
+                <br>
+            </div>
+
+            <div class="col-md-5">
+                <form class="form">
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">
+                            <div class="clearfix">
+                                <span class="pull-left">@Html.DisplayNameFor(model => model.Type)</span>
+
+                                <strong class="pull-right">@Html.DisplayFor(model => model.Type)</strong>
+                            </div>
+                        </li>
+
+                        <li class="list-group-item">
+                            <div class="clearfix">
+                                <span class="pull-left">@Html.DisplayNameFor(model => model.BrandId)</span>
+
+                                <strong class="pull-right">@Html.DisplayFor(model => model.Brand.Name)</strong>
+                            </div>
+                        </li>
+
+                        <li class="list-group-item">
+                            <div class="clearfix">
+                                <span class="pull-left">@Html.DisplayNameFor(model => model.Status)</span>
+
+                                <strong class="pull-right">@Html.DisplayFor(model => model.Status) Vehicle</strong>
+                            </div>
+                        </li>
+
+                        <li class="list-group-item">
+                            <div class="clearfix">
+                                <span class="pull-left">@Html.DisplayNameFor(model => model.FuelType)</span>
+
+                                <strong class="pull-right">@Html.DisplayFor(model => model.FuelType)</strong>
+                            </div>
+                        </li>
+
+                        <li class="list-group-item">
+                            <div class="clearfix">
+                                <span class="pull-left">@Html.DisplayNameFor(model => model.Gearbox)</span>
+
+                                <strong class="pull-right">@Html.DisplayFor(model => model.Gearbox)</strong>
+                            </div>
+                        </li>
+
+                        <li class="list-group-item">
+                            <div class="clearfix">
+                                <span class="pull-left">@Html.DisplayNameFor(model => model.ShowInHome)</span>
+
+                                <strong class="pull-right">@Html.DisplayFor(model => model.ShowInHome)</strong>
+                            </div>
+                        </li>
+
+                        <li class="list-group-item">
+                            <div class="clearfix">
+                                <span class="pull-left">@Html.DisplayNameFor(model => model.Price)</span>
+
+                                <strong class="pull-right">@Html.DisplayFor(model => model.Price)</strong>
+                            </div>
+                        </li>
+
+                        <li class="list-group-item">
+                            <div class="clearfix">
+                                <span class="pull-left">@Html.DisplayNameFor(model => model.Color)</span>
+
+                                <strong class="pull-right">@Html.DisplayFor(model => model.Color)</strong>
+                            </div>
+                        </li>
+
+                        <li class="list-group-item">
+                            <div class="clearfix">
+                                <span class="pull-left">@Html.DisplayNameFor(model => model.Mileage)</span>
+
+                                <strong class="pull-right">@Html.DisplayFor(model => model.Mileage) km</strong>
+                            </div>
+                        </li>
+
+                        <li class="list-group-item">
+                            <div class="clearfix">
+                                <span class="pull-left">@Html.DisplayNameFor(model => model.ModelYear)</span>
+
+                                <strong class="pull-right">@Html.DisplayFor(model => model.ModelYear)</strong>
+                            </div>
+                        </li>
+
+                        <li class="list-group-item">
+                            <div class="clearfix">
+                                <span class="pull-left">@Html.DisplayNameFor(model => model.SeatCount)</span>
+
+                                <strong class="pull-right">@Html.DisplayFor(model => model.SeatCount)</strong>
+                            </div>
+                        </li>
+
+                        <li class="list-group-item">
+                            <div class="clearfix">
+                                <span class="pull-left">@Html.DisplayNameFor(model => model.WeightTotal)</span>
+
+                                <strong class="pull-right">@Html.DisplayFor(model => model.WeightTotal)</strong>
+                            </div>
+                        </li>
+
+                        <li class="list-group-item">
+                            <div class="clearfix">
+                                <span class="pull-left">@Html.DisplayNameFor(model => model.Description)</span>
+
+                                <strong class="pull-right">@Html.DisplayFor(model => model.Description)</strong>
+                            </div>
+                        </li>
+
+                        <li class="list-group-item">
+                            <div class="clearfix">
+                                <span class="pull-left">@Html.DisplayNameFor(model => model.CarExtras)</span>
+
+                                <strong class="pull-right">@Html.DisplayFor(model => model.CarExtras)</strong>
+                            </div>
+                        </li>
+
+                        <li class="list-group-item">
+                            <div class="clearfix">
+                                <span class="pull-left">@Html.DisplayNameFor(model => model.CreatedAt)</span>
+
+                                <strong class="pull-right">@Html.DisplayFor(model => model.CreatedAt)</strong>
+                            </div>
+                        </li>
+
+                    </ul>
+                </form>
+
+                <br>
+            </div>
+        </div>
+
+        <div class="m-3 text-right">
+            <a class="btn btn-primary m-1" asp-action="Edit" asp-route-id="@Model.Id">Edit</a>
+            <a class="btn btn-outline-danger m-1" asp-action="Index">Back to List</a>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,33 @@
+﻿@model IEnumerable<Car>
+
+@if (Model != null && Model.Any())
+{
+    foreach (var car in Model)
+    {
+        <div class="col-md-4">
+            <div class="service-item">
+                <img src="~/assets/images/@(((car.Images.FirstOrDefault()) != null) ? car.Images.First().Path : string.Empty)" alt="There is no picture of this vehicle!" style="height: 250px; object-fit: cover;">
+                <div class="down-content">
+                    <h4>@car.Brand.Name</h4>
+                    <div style="margin-bottom:10px;">
+                        @if (car.Type == CarType.ForRent)
+                        {
+                            <span>Daily Rent : <sup>$</sup>@(car.Price)</span>
+                        }
+                        else
+                        {
+                            <span>Price : <sup>$</sup>@(car.Price)</span>
+                        }
+                    </div>
+                    <p>
+                        <i class="fa fa-cube"></i> @car.ModelYear &nbsp;&nbsp;&nbsp;
+                        <i class="fa fa-dashboard"></i> @car.FuelType &nbsp;&nbsp;&nbsp;
+                        <i class="fa fa-cog"></i> @car.Gearbox &nbsp;&nbsp;&nbsp;
+                    </p>
+                    <a href="/cars/details/@car.Id" class="filled-button">View More</a>
+                </div>
+            </div>
+            <br>
+        </div>
+    }
+}

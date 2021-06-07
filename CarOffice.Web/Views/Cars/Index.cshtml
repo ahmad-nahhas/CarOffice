@@ -1,0 +1,150 @@
+﻿@model CarFilter
+
+<div class="page-heading header-text">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <h1>Cars</h1>
+                <span>We are not the only ones, but we are the best!</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="services">
+    <div class="container">
+        <form id="contact">
+            <div class="row">
+                <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+                    <div class="form-group">
+                        <label>Brand Name:</label>
+
+                        <input class="form-control" type="text" asp-for="@Model.Brand" />
+                    </div>
+                </div>
+
+                <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+                    <div class="form-group">
+                        <label>Color:</label>
+
+                        <input class="form-control" type="text" asp-for="@Model.Color" />
+                    </div>
+                </div>
+
+                <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+                    <div class="form-group">
+                        <label>Price:</label>
+
+                        <input class="form-control" placeholder="Lower Limit" type="number" asp-for="@Model.LowerLimit" />
+                    </div>
+                </div>
+
+                <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+                    <div class="form-group">
+                        <label>Price:</label>
+
+                        <input class="form-control" placeholder="Upper Limit" type="number" asp-for="@Model.UpperLimit" />
+                    </div>
+                </div>
+
+                <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+                    <div class="form-group">
+                        <label>Modelyear:</label>
+
+                        <input class="form-control" type="number" asp-for="@Model.ModelYear" />
+                    </div>
+                </div>
+
+                <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+                    <div class="form-group">
+                        <label>Mileage:</label>
+
+                        <input class="form-control" type="number" asp-for="@Model.Mileage" />
+                    </div>
+                </div>
+
+                <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+                    <div class="form-group">
+                        <label>Number of seats:</label>
+
+                        <input class="form-control" type="number" asp-for="@Model.SeatCount" />
+                    </div>
+                </div>
+
+                <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+                    <div class="form-group">
+                        <label>Weight:</label>
+
+                        <input class="form-control" type="number" asp-for="@Model.WeightTotal" />
+                    </div>
+                </div>
+
+                <input type="number" asp-for="@Model.PageNumber" id="page" hidden />
+            </div>
+        </form>
+
+        <div class="col-sm-4 offset-sm-4 mt-1 mb-5">
+            <div class="main-button text-center mt-1">
+                <button onclick="Search()" class="btn btn-outline-primary btn-lg font-weight-bold">Search</button>
+            </div>
+        </div>
+
+        <div class="row" id="cars">
+            @await Component.InvokeAsync("GetCars", new { filter = Model })
+        </div>
+
+        <nav class="mt-3 mb-5">
+            <ul class="pagination pagination-lg justify-content-center">
+                <li class="page-item">
+                    <a class="page-link" onclick="PreviousPage()" aria-label="Previous">
+                        <span aria-hidden="true">«</span>
+                    </a>
+                </li>
+                @for (int i = 1; i <= Model.TotalPages; i++)
+                {
+                    <li class="page-item">
+                        <button class="page-link" onclick="ChangePage(@i)">@i</button>
+                    </li>
+                }
+                <li class="page-item">
+                    <a class="page-link" onclick="NextPage()" aria-label="Next">
+                        <span aria-hidden="true">»</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</div>
+
+<script>
+    function Search() {
+        $.ajax({
+            url: '@Url.Action("GetFiltered", "Cars")',
+            data: $('#contact').serialize(),
+            success: function (data) {
+                $("#cars").html(data);
+            }
+        })
+    }
+
+    function ChangePage(pageNumber) {
+        document.getElementById("page").value = pageNumber;
+        Search();
+    }
+
+    function NextPage() {
+        if (document.getElementById("page").value < @Model.TotalPages) {
+            document.getElementById("page").value = parseInt(document.getElementById("page").value) + 1;
+
+            Search();
+        }
+    }
+
+    function PreviousPage() {
+        if (document.getElementById("page").value > 1) {
+            document.getElementById("page").value -= 1;
+
+            Search();
+        }
+    }
+</script>

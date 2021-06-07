@@ -1,0 +1,215 @@
+﻿@model Car
+
+@if (Model != null)
+{
+    <div class="page-heading header-text">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <h1><small><del><sup>$</sup>@(Model.Price + 1500) </del></small> &nbsp; <sup>$</sup>@Model.Price</h1>
+                    <span>Many cars for sale or rent at prices that satisfy everyone.</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="services">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-7">
+                    <div>
+                        <img src="~/assets/images/@((Model.Images.FirstOrDefault() != null) ? Model.Images.First().Path : string.Empty)" alt="Image upload error!" class="img-fluid wc-image">
+                    </div>
+
+                    <br>
+
+                    <div class="row">
+                        @if (Model.Images != null && Model.Images.Any())
+                        {
+                            foreach (var image in Model.Images)
+                            {
+                                <div class="col-sm-4 col-6">
+                                    <div>
+                                        <img src="~/assets/images/@image.Path" alt="Image upload error!" class="img-fluid">
+                                    </div>
+                                    <br>
+                                </div>
+                            }
+                        }
+                    </div>
+
+                    <br>
+                </div>
+
+                <div class="col-md-5">
+                    <form class="form">
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item">
+                                <div class="clearfix">
+                                    <span class="pull-left">Type</span>
+
+                                    <strong class="pull-right">@Model.Type</strong>
+                                </div>
+                            </li>
+
+                            <li class="list-group-item">
+                                <div class="clearfix">
+                                    <span class="pull-left">Car Status</span>
+
+                                    <strong class="pull-right">@Model.Status</strong>
+                                </div>
+                            </li>
+
+                            <li class="list-group-item">
+                                <div class="clearfix">
+                                    <span class="pull-left">Brand</span>
+
+                                    <strong class="pull-right">@Model.Brand.Name</strong>
+                                </div>
+                            </li>
+
+                            <li class="list-group-item">
+                                <div class="clearfix">
+                                    <span class="pull-left">Fuel</span>
+
+                                    <strong class="pull-right">@Model.FuelType</strong>
+                                </div>
+                            </li>
+
+                            <li class="list-group-item">
+                                <div class="clearfix">
+                                    <span class="pull-left">Gearbox</span>
+
+                                    <strong class="pull-right">@Model.Gearbox</strong>
+                                </div>
+                            </li>
+
+                            <li class="list-group-item">
+                                <div class="clearfix">
+                                    <span class="pull-left">Price</span>
+
+                                    <strong class="pull-right">@Model.Price</strong>
+                                </div>
+                            </li>
+
+                            <li class="list-group-item">
+                                <div class="clearfix">
+                                    <span class="pull-left">Color</span>
+
+                                    <strong class="pull-right">@Model.Color</strong>
+                                </div>
+                            </li>
+
+                            <li class="list-group-item">
+                                <div class="clearfix">
+                                    <span class="pull-left">Mileage</span>
+
+                                    <strong class="pull-right">@Model.Mileage km</strong>
+                                </div>
+                            </li>
+
+                            <li class="list-group-item">
+                                <div class="clearfix">
+                                    <span class="pull-left">Number of seats</span>
+
+                                    <strong class="pull-right">@Model.SeatCount</strong>
+                                </div>
+                            </li>
+
+                            <li class="list-group-item">
+                                <div class="clearfix">
+                                    <span class="pull-left">Weight</span>
+
+                                    <strong class="pull-right">@Model.WeightTotal</strong>
+                                </div>
+                            </li>
+                        </ul>
+                    </form>
+
+                    <br>
+                </div>
+            </div>
+
+            <br>
+
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="tabs-content">
+                        <h4>Vehicle Description</h4>
+
+                        <p>@Model.Description</p>
+
+                        <br>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="tabs-content">
+                        <h4>Vehicle Extras</h4>
+
+                        <p>@Model.CarExtras</p>
+                    </div>
+
+                    <br>
+                    <br>
+
+                    <div class="tabs-content">
+                        <h4>Contact Details</h4>
+
+                        <p>
+                            <span>Name</span>
+
+                            <br>
+
+                            <strong>Ahmet Bakırcı</strong>
+                        </p>
+
+                        <p>
+                            <span>Phone</span>
+
+                            <br>
+
+                            <strong>
+                                <a href="tel:+905383754105">+90 538 375 4105</a>
+                            </strong>
+                        </p>
+
+                        <p>
+                            <span>Mobile phone</span>
+
+                            <br>
+
+                            <strong>
+                                <a href="tel:+905383754105">+90 538 375 4105</a>
+                            </strong>
+                        </p>
+
+                        <p>
+                            <span>Email</span>
+
+                            <br>
+
+                            <strong>
+                                <a href="mailto:ahmetbakirci30@gmail.com">ahmetbakirci30@gmail.com</a>
+                            </strong>
+                        </p>
+                    </div>
+
+                    <br>
+                </div>
+            </div>
+
+            <br>
+            <br>
+            <br>
+        </div>
+    </div>
+}
+else
+{
+    @await Html.PartialAsync("_error", new ErrorViewModel
+    {
+        StatusCode = 404,
+        ErrorMessage = "The page you are looking for might have been removed had its name changed or is temporarily unavailable."
+    })
+}
