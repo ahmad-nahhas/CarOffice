@@ -13,7 +13,7 @@ namespace CarOffice.Shared.Filters
         public override IQueryable<CarImage> Build(IQueryable<CarImage> initialSet)
         {
             initialSet = (CarId.HasValue && !CarId.Equals(Guid.Empty)) ?
-                initialSet.Where(i => i.CarId == CarId) : initialSet;
+                initialSet.Where(i => i.CarId.Equals(CarId)) : initialSet;
 
             initialSet = string.IsNullOrWhiteSpace(Path) ?
                 initialSet : initialSet.Where(i => i.Path.Equals(Path));

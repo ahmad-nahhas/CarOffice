@@ -24,7 +24,7 @@ namespace CarOffice.Web
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<CarOfficeDbContext>(options => options.UseLazyLoadingProxies()
-                .UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+                             .UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddIdentity<IdentityUser, IdentityRole>()
                 .AddEntityFrameworkStores<CarOfficeDbContext>();
