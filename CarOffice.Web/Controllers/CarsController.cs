@@ -1,6 +1,7 @@
 ﻿using CarOffice.Shared.Entities;
 using CarOffice.Shared.Filters;
 using CarOffice.Shared.Repositories.Interfaces;
+using CarOffice.Web.Models;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
@@ -16,11 +17,12 @@ namespace CarOffice.Web.Controllers
             _repository = repository;
         }
 
-        public IActionResult Index()
-            => View(new CarFilter());
-
-        public IActionResult GetFiltered(CarFilter filter)
-            => ViewComponent("GetCars", new { filter });
+        public async Task<IActionResult> Index(CarFilter filter)
+            => View(new CarFilterViewModel
+            {
+                Cars = await _repository.GetAsync(filter ??= new CarFilter()),
+                Filter = filter
+            });
 
         public async Task<IActionResult> Details(Guid id)
             => View(await _repository.GetAsync(id));

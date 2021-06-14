@@ -1,4 +1,4 @@
-﻿@model CarFilter
+﻿@model CarFilterViewModel
 
 <div class="page-heading header-text">
     <div class="container">
@@ -13,13 +13,13 @@
 
 <div class="services">
     <div class="container">
-        <form id="contact">
+        <form id="contact" asp-controller="Cars" asp-action="Index">
             <div class="row">
                 <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
                     <div class="form-group">
                         <label>Brand Name:</label>
 
-                        <input class="form-control" type="text" asp-for="@Model.Brand" />
+                        <input class="form-control" type="text" asp-for="@Model.Filter.Brand" />
                     </div>
                 </div>
 
@@ -27,7 +27,7 @@
                     <div class="form-group">
                         <label>Color:</label>
 
-                        <input class="form-control" type="text" asp-for="@Model.Color" />
+                        <input class="form-control" type="text" asp-for="@Model.Filter.Color" />
                     </div>
                 </div>
 
@@ -35,7 +35,7 @@
                     <div class="form-group">
                         <label>Price:</label>
 
-                        <input class="form-control" placeholder="Lower Limit" type="number" asp-for="@Model.LowerLimit" />
+                        <input class="form-control" placeholder="Lower Limit" type="number" asp-for="@Model.Filter.LowerLimit" />
                     </div>
                 </div>
 
@@ -43,7 +43,7 @@
                     <div class="form-group">
                         <label>Price:</label>
 
-                        <input class="form-control" placeholder="Upper Limit" type="number" asp-for="@Model.UpperLimit" />
+                        <input class="form-control" placeholder="Upper Limit" type="number" asp-for="@Model.Filter.UpperLimit" />
                     </div>
                 </div>
 
@@ -51,7 +51,7 @@
                     <div class="form-group">
                         <label>Modelyear:</label>
 
-                        <input class="form-control" type="number" asp-for="@Model.ModelYear" />
+                        <input class="form-control" type="number" asp-for="@Model.Filter.ModelYear" />
                     </div>
                 </div>
 
@@ -59,7 +59,7 @@
                     <div class="form-group">
                         <label>Mileage:</label>
 
-                        <input class="form-control" type="number" asp-for="@Model.Mileage" />
+                        <input class="form-control" type="number" asp-for="@Model.Filter.Mileage" />
                     </div>
                 </div>
 
@@ -67,7 +67,7 @@
                     <div class="form-group">
                         <label>Number of seats:</label>
 
-                        <input class="form-control" type="number" asp-for="@Model.SeatCount" />
+                        <input class="form-control" type="number" asp-for="@Model.Filter.SeatCount" />
                     </div>
                 </div>
 
@@ -75,40 +75,71 @@
                     <div class="form-group">
                         <label>Weight:</label>
 
-                        <input class="form-control" type="number" asp-for="@Model.WeightTotal" />
+                        <input class="form-control" type="number" asp-for="@Model.Filter.WeightTotal" />
                     </div>
                 </div>
 
-                <input type="number" asp-for="@Model.PageNumber" id="page" hidden />
+                <input type="number" asp-for="@Model.Filter.PageNumber" id="page" hidden />
+            </div>
+            <div class="col-sm-4 offset-sm-4 mt-1 mb-5">
+                <div class="main-button text-center mt-1">
+                    <input type="submit" class="btn btn-outline-primary btn-lg font-weight-bold" id="btnSearch" value="Search" />
+                </div>
             </div>
         </form>
 
-        <div class="col-sm-4 offset-sm-4 mt-1 mb-5">
-            <div class="main-button text-center mt-1">
-                <button onclick="Search()" class="btn btn-outline-primary btn-lg font-weight-bold">Search</button>
-            </div>
-        </div>
-
         <div class="row" id="cars">
-            @await Component.InvokeAsync("GetCars", new { filter = Model })
+            @if (Model != null && Model.Cars != null && Model.Cars.Any())
+            {
+                foreach (var car in Model.Cars)
+                {
+                    <div class="col-md-4">
+                        <div class="service-item">
+                            <img src="~/assets/images/@(((car.Images.FirstOrDefault()) != null) ? car.Images.First().Path : string.Empty)" alt="There is no picture of this vehicle!" style="height: 250px; object-fit: cover;">
+                            <div class="down-content">
+                                <h4>@car.Brand.Name</h4>
+                                <div style="margin-bottom:10px;">
+                                    @if (car.Type == CarType.ForRent)
+                                    {
+                                        <span>Daily Rent : <sup>$</sup>@(car.Price)</span>
+                                    }
+                                    else
+                                    {
+                                        <span>Price : <sup>$</sup>@(car.Price)</span>
+                                    }
+                                </div>
+                                <p>
+                                    <i class="fa fa-cube"></i> @car.ModelYear &nbsp;&nbsp;&nbsp;
+                                    <i class="fa fa-dashboard"></i> @car.FuelType &nbsp;&nbsp;&nbsp;
+                                    <i class="fa fa-cog"></i> @car.Gearbox &nbsp;&nbsp;&nbsp;
+                                </p>
+                                <a href="/cars/details/@car.Id" class="filled-button">View More</a>
+                            </div>
+                        </div>
+                        <br>
+                    </div>
+                }
+            }
         </div>
 
         <nav class="mt-3 mb-5">
             <ul class="pagination pagination-lg justify-content-center">
-                <li class="page-item">
-                    <a class="page-link" onclick="PreviousPage()" aria-label="Previous">
+                <li class="page-item @(Model.Filter.HasPrevious ? string.Empty : "disabled")" onclick="PreviousPage()">
+                    <a class="page-link" aria-label="Previous">
                         <span aria-hidden="true">«</span>
+                        <span class="sr-only">Previous</span>
                     </a>
                 </li>
-                @for (int i = 1; i <= Model.TotalPages; i++)
+
+                @for (int i = 1; i <= Model.Filter.TotalPages; i++)
                 {
-                    <li class="page-item">
-                        <button class="page-link" onclick="ChangePage(@i)">@i</button>
-                    </li>
+                    <li class="page-item" onclick="ChangePage(@i)"><a class="page-link">@i</a></li>
                 }
-                <li class="page-item">
-                    <a class="page-link" onclick="NextPage()" aria-label="Next">
+
+                <li class="page-item @(Model.Filter.HasNext ? string.Empty : "disabled")" onclick="NextPage()">
+                    <a class="page-link" aria-label="Next">
                         <span aria-hidden="true">»</span>
+                        <span class="sr-only">Next</span>
                     </a>
                 </li>
             </ul>
@@ -118,22 +149,17 @@
 
 <script>
     function Search() {
-        $.ajax({
-            url: '@Url.Action("GetFiltered", "Cars")',
-            data: $('#contact').serialize(),
-            success: function (data) {
-                $("#cars").html(data);
-            }
-        })
+        document.getElementById("btnSearch").click();
     }
 
     function ChangePage(pageNumber) {
         document.getElementById("page").value = pageNumber;
+
         Search();
     }
 
     function NextPage() {
-        if (document.getElementById("page").value < @Model.TotalPages) {
+        if (document.getElementById("page").value < @Model.Filter.TotalPages) {
             document.getElementById("page").value = parseInt(document.getElementById("page").value) + 1;
 
             Search();
