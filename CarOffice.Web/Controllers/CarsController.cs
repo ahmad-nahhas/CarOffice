@@ -17,7 +17,7 @@ namespace CarOffice.Web.Controllers
             _repository = repository;
         }
 
-        public async Task<IActionResult> Index(CarFilter filter)
+        public async Task<IActionResult> Index([FromQuery] CarFilter filter = null)
             => View(new CarFilterViewModel
             {
                 Cars = await _repository.GetAsync(filter ??= new CarFilter()),
