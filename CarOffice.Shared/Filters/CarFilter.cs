@@ -26,9 +26,6 @@ namespace CarOffice.Shared.Filters
 
         public override IQueryable<Car> Build(IQueryable<Car> initialSet)
         {
-            if (!string.IsNullOrWhiteSpace(Brand))
-                initialSet = initialSet.Where(c => c.Brand.Name.ToLower().Contains(Brand.ToLower()));
-
             if (Type.HasValue)
                 initialSet = initialSet.Where(c => c.Type == Type);
 
@@ -36,16 +33,16 @@ namespace CarOffice.Shared.Filters
                 initialSet = initialSet.Where(c => c.Status == Status);
 
             if (Type.HasValue)
-                initialSet = initialSet.Where(c => c.FuelType == FuelType);
-
-            if (Type.HasValue)
                 initialSet = initialSet.Where(c => c.Gearbox == Gearbox);
 
-            if (ShowInHome.HasValue)
-                initialSet = initialSet.Where(c => c.ShowInHome == ShowInHome);
+            if (Type.HasValue)
+                initialSet = initialSet.Where(c => c.FuelType == FuelType);
 
             if (Shuffle.HasValue && Shuffle == true)
                 initialSet = initialSet.OrderBy(c => Guid.NewGuid());
+
+            if (ShowInHome.HasValue)
+                initialSet = initialSet.Where(c => c.ShowInHome == ShowInHome);
 
             if (LowerLimit.HasValue)
                 initialSet = initialSet.Where(c => c.Price >= LowerLimit);
@@ -53,26 +50,29 @@ namespace CarOffice.Shared.Filters
             if (UpperLimit.HasValue)
                 initialSet = initialSet.Where(c => c.Price <= UpperLimit);
 
-            if (!string.IsNullOrWhiteSpace(Color))
-                initialSet = initialSet.Where(c => c.Color.ToLower().Contains(Color.ToLower()));
-
-            if (ModelYear.HasValue)
-                initialSet = initialSet.Where(c => c.ModelYear == ModelYear);
-
             if (Mileage.HasValue)
                 initialSet = initialSet.Where(c => c.Mileage <= Mileage);
 
             if (SeatCount.HasValue)
                 initialSet = initialSet.Where(c => c.SeatCount == SeatCount);
 
+            if (ModelYear.HasValue)
+                initialSet = initialSet.Where(c => c.ModelYear == ModelYear);
+
             if (WeightTotal.HasValue)
                 initialSet = initialSet.Where(c => c.WeightTotal <= WeightTotal);
 
-            if (!string.IsNullOrWhiteSpace(Description))
-                initialSet = initialSet.Where(c => c.Description.ToLower().Contains(Description.ToLower()));
+            if (!string.IsNullOrWhiteSpace(Color))
+                initialSet = initialSet.Where(c => c.Color.ToLower().Contains(Color.ToLower()));
+
+            if (!string.IsNullOrWhiteSpace(Brand))
+                initialSet = initialSet.Where(c => c.Brand.Name.ToLower().Contains(Brand.ToLower()));
 
             if (!string.IsNullOrWhiteSpace(CarExtras))
                 initialSet = initialSet.Where(c => c.CarExtras.ToLower().Contains(CarExtras.ToLower()));
+
+            if (!string.IsNullOrWhiteSpace(Description))
+                initialSet = initialSet.Where(c => c.Description.ToLower().Contains(Description.ToLower()));
 
             return base.Build(initialSet);
         }
