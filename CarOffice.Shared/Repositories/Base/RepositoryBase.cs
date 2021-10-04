@@ -32,7 +32,15 @@ namespace CarOffice.Shared.Repositories.Base
             var added = await _table.AddAsync(entity);
             var affected = await _context.SaveChangesAsync();
 
-            return (affected == 1) ? added.Entity : null;
+            return (affected > 0) ? added.Entity : null;
+        }
+
+        public async Task<T> DeleteAsync(object id)
+        {
+            var deleted = _table.Remove(await GetAsync(id));
+            var affected = await _context.SaveChangesAsync();
+
+            return (affected > 0) ? deleted.Entity : null;
         }
 
         public async Task<T> UpdateAsync(T entity)
@@ -41,15 +49,7 @@ namespace CarOffice.Shared.Repositories.Base
             _context.Entry(entity).State = EntityState.Modified;
             var affected = await _context.SaveChangesAsync();
 
-            return (affected == 1) ? updated.Entity : null;
-        }
-
-        public async Task<T> DeleteAsync(object id)
-        {
-            var deleted = _table.Remove(await GetAsync(id));
-            var affected = await _context.SaveChangesAsync();
-
-            return (affected == 1) ? deleted.Entity : null;
+            return (affected > 0) ? updated.Entity : null;
         }
     }
 }
