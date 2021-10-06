@@ -13,9 +13,7 @@ namespace CarOffice.Web.Controllers
         private readonly IRepository<Car> _repository;
 
         public CarsController(IRepository<Car> repository)
-        {
-            _repository = repository;
-        }
+            => _repository = repository;
 
         public async Task<IActionResult> Index([FromQuery] CarFilter filter = null)
             => View(new CarFilterViewModel

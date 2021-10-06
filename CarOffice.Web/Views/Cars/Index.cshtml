@@ -83,7 +83,8 @@
             </div>
             <div class="col-sm-4 offset-sm-4 mt-1 mb-5">
                 <div class="main-button text-center mt-1">
-                    <input type="submit" class="btn btn-outline-primary btn-lg font-weight-bold" id="btnSearch" value="Search" />
+                    <input type="submit" id="btnSearch" value="Search"
+                           class="btn btn-outline-primary btn-lg font-weight-bold" />
                 </div>
             </div>
         </form>
@@ -154,14 +155,12 @@
 
     function ChangePage(pageNumber) {
         document.getElementById("page").value = pageNumber;
-
         Search();
     }
 
     function NextPage() {
         if (document.getElementById("page").value < @Model.Filter.TotalPages) {
             document.getElementById("page").value = parseInt(document.getElementById("page").value) + 1;
-
             Search();
         }
     }
@@ -169,7 +168,6 @@
     function PreviousPage() {
         if (document.getElementById("page").value > 1) {
             document.getElementById("page").value -= 1;
-
             Search();
         }
     }

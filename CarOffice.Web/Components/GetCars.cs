@@ -11,9 +11,7 @@ namespace CarOffice.Web.Components
         private readonly IRepository<Car> _repository;
 
         public GetCars(IRepository<Car> repository)
-        {
-            _repository = repository;
-        }
+            => _repository = repository;
 
         public async Task<IViewComponentResult> InvokeAsync(CarFilter filter)
             => View(await _repository.GetAsync(filter));

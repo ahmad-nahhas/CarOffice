@@ -10,9 +10,7 @@ namespace CarOffice.Web.Controllers
         private readonly SignInManager<IdentityUser> _signInManager;
 
         public AccountController(SignInManager<IdentityUser> signInManager)
-        {
-            _signInManager = signInManager;
-        }
+            => _signInManager = signInManager;
 
         public IActionResult Login()
             => View();
@@ -22,7 +20,8 @@ namespace CarOffice.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, false);
+                var result = await _signInManager
+                    .PasswordSignInAsync(model.Email, model.Password, model.RememberMe, false);
 
                 if (result.Succeeded)
                     return RedirectToAction("index", "dashboard");

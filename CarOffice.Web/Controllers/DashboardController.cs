@@ -17,17 +17,15 @@ namespace CarOffice.Web.Controllers
     public class DashboardController : Controller
     {
         private readonly IRepository<Car> _car;
-        private readonly IRepository<CarBrand> _brand;
         private readonly IRepository<CarImage> _image;
         private readonly IWebHostEnvironment _webHost;
 
-        public DashboardController(IRepository<Car> car,
-                                   IRepository<CarBrand> brand,
-                                   IRepository<CarImage> image,
-                                   IWebHostEnvironment webHostEnvironment)
+        public DashboardController(
+            IRepository<Car> car, 
+            IRepository<CarImage> image, 
+            IWebHostEnvironment webHostEnvironment)
         {
             _car = car;
-            _brand = brand;
             _image = image;
             _webHost = webHostEnvironment;
         }
@@ -38,121 +36,87 @@ namespace CarOffice.Web.Controllers
         public async Task<ActionResult> Details(Guid id)
             => View(await _car.GetAsync(id));
 
-        public async Task<ActionResult> Create()
-        {
-            ViewBag.Brands = await _brand.GetAsync();
-
-            return View();
-        }
+        public ActionResult Create()
+            => View();
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public async Task<ActionResult> Create(Car car)
         {
-            try
-            {
-                if (car == null || !ModelState.IsValid)
-                    return RedirectToAction(nameof(Create));
+            if (!ModelState.IsValid)
+                return View(car);
 
-                await _car.AddAsync(car);
-                await SaveImages(car.Files, car.Id);
-
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return RedirectToAction(nameof(Create));
-            }
+            await _car.AddAsync(car);
+            await SaveImages(car.Files, car.Id);
+            return RedirectToAction(nameof(Index));
         }
 
         public async Task<ActionResult> Edit(Guid id)
         {
-            try
-            {
-                ViewBag.Brands = await _brand.GetAsync();
+            var car = await _car.GetAsync(id);
 
-                var car = await _car.GetAsync(id);
-
-                return (car != null) ? View(car) :
-                    RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return RedirectToAction(nameof(Index));
-            }
+            return (car != null)
+                ? View(car)
+                : RedirectToAction(nameof(Index));
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public async Task<ActionResult> Edit(Car car)
         {
-            try
-            {
-                if (car == null || !ModelState.IsValid)
-                    return RedirectToAction(nameof(Edit));
+            if (!ModelState.IsValid)
+                return View(car);
 
-                await _car.UpdateAsync(car);
-                await UpdateImages(car.Files, car.Id);
-
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return RedirectToAction(nameof(Edit));
-            }
+            await _car.UpdateAsync(car);
+            await UpdateImages(car.Files, car.Id);
+            return RedirectToAction(nameof(Index));
         }
 
         public async Task<ActionResult> Delete(Guid id)
         {
-            try
-            {
-                await DeleteImages(id);
-                await _car.DeleteAsync(id);
-
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return RedirectToAction(nameof(Index));
-            }
+            await DeleteImages(id);
+            await _car.DeleteAsync(id);
+            return RedirectToAction(nameof(Index));
         }
 
         private async Task SaveImages(IEnumerable<IFormFile> files, Guid carId)
         {
-            if (files != null && files.Any())
+            if (files == null || !files.Any())
+                return;
+
+            foreach (var file in files)
             {
-                foreach (var file in files)
+                using var stream = new FileStream(
+                    Path.Combine(_webHost.WebRootPath, "assets",
+                    "images", file.FileName), FileMode.Create);
+                await file.CopyToAsync(stream);
+                await _image.AddAsync(new CarImage
                 {
-                    string path = Path.Combine(_webHost.WebRootPath, "assets", "images", file.FileName);
-
-                    using var stream = new FileStream(path, FileMode.Create);
-                    await file.CopyToAsync(stream);
-
-                    await _image.AddAsync(new CarImage { CarId = carId, Path = file.FileName });
-                }
-            }
-        }
-
-        private async Task UpdateImages(IEnumerable<IFormFile> files, Guid carId)
-        {
-            if (files != null && files.Any())
-            {
-                await DeleteImages(carId);
-                await SaveImages(files, carId);
+                    CarId = carId,
+                    Path = file.FileName
+                });
             }
         }
 
         private async Task DeleteImages(Guid carId)
         {
-            var images = await _image.GetAsync(new ImageFilter() { CarId = carId, ApplyPagination = false });
-
-            foreach (var image in images)
+            foreach (var image in await _image.GetAsync(new ImageFilter
             {
-                string path = Path.Combine(_webHost.WebRootPath, "assets", "images", image.Path);
-                System.IO.File.Delete(path);
-
+                CarId = carId,
+                ApplyPagination = false
+            }))
+            {
+                System.IO.File.Delete(Path.Combine(_webHost.WebRootPath, 
+                    "assets", "images", image.Path));
                 await _image.DeleteAsync(image.Id);
             }
+        }
+
+        private async Task UpdateImages(IEnumerable<IFormFile> files, Guid carId)
+        {
+            if (files == null || !files.Any())
+                return;
+
+            await DeleteImages(carId);
+            await SaveImages(files, carId);
         }
     }
 }
